@@ -2,6 +2,7 @@ import requests
 from datetime import datetime, timedelta
 from models import WeatherRecord
 from config import BASE_URL 
+from logger import get_logger
 
 def fetch_weather(city, start_date, end_date):
     current_date = start_date
@@ -19,7 +20,8 @@ def fetch_weather(city, start_date, end_date):
         data = response.json()
 
         if "hourly" not in data:
-            print(f"No hourly data for {city.name} on {current_date}. Response: {data}")
+            logger = get_logger(__name__)
+            logger.warning(f"No hourly data for {city.name} on {current_date}. Response: {data}")
             current_date += timedelta(days=1)
             continue
 
