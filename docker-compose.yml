@@ -4,18 +4,20 @@ services:
 
   postgres:
     image: postgres:15
-    container_name: weather_postgres
+    container_name: weather_postgres_c
     env_file:
       - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./sql:/docker-entrypoint-initdb.d
-  # ports:
-  #   - "5432:5432"
+    ports:
+      - "5433:5432"
 
   weather_pipeline:
     build: .
-    container_name: weather_pipeline
+    container_name: weather_pipeline_c
+    volumes:
+      - ./:/app 
     depends_on:
       - postgres
     env_file:
