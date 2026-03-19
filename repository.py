@@ -27,7 +27,7 @@ def upsert_weather(records):
     cursor.close()
     conn.close()
 
-def get_last_leaded_date(pipeline_name = "weather_pipeline"):
+def get_last_leaded_date(pipeline_name = "weather_raw_pipeline"):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT last_loaded_date FROM etl_metadata where pipeline_name = %s",
