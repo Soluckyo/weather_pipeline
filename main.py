@@ -10,11 +10,9 @@ def main():
     logger = get_logger(__name__)
     last_date = get_last_leaded_date()
     today = date.today()
+    DEFAULT_START_DATE = date(2026, 1, 1)
 
-    if last_date:
-        start_date = last_date + timedelta(days=1)
-    else:
-        start_date = today
+    start_date = last_date + timedelta(days=1) if last_date else DEFAULT_START_DATE
 
     for city in CITIES:
         logger.warning(f"Fetching weather for {city.name}")
