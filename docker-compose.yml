@@ -22,7 +22,7 @@ services:
       - postgres
     env_file:
       - .env
-    command: python main.py
+    command: python pipeline.py
 
 volumes:
   postgres_data:

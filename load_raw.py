@@ -6,7 +6,7 @@ from logger import get_logger
 from validation import is_valid_record
 
 
-def main():
+def load_raw():
     logger = get_logger(__name__)
     last_date = get_last_leaded_date()
     today = date.today()
@@ -35,6 +35,3 @@ def main():
         #print(f"City {city.name}: {len(records)} records fetched from {start_date} to {today}")
         logger.warning(f"City {city.name}: {len(records)} records fetched from {start_date} to {today}")
     update_last_loaded_date(today)
-
-if __name__ == "__main__":
-    main()

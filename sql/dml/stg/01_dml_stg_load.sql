@@ -12,10 +12,12 @@ select rw.city,
   									 from etl_metadata em 
   									where em.pipeline_name = 'fct_weather')
   								  ,'1970-01-01')
+     ON conflict(city, obs_date, obs_hour) do nothing;
   
  
 --обновление metadata
 insert into etl_metadata(pipeline_name, last_loaded_date)
 values('weather_stg', now())
 on conflict(pipeline_name) do update
-set last_loaded_date = excluded.last_loaded_date
+set last_loaded_date = excluded.last_loaded_date;
+

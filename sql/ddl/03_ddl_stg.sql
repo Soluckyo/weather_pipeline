@@ -6,3 +6,6 @@ create table stg_weather(
 	wind_speed float8,
 	precipitation float8,
 	ingestion_time timestamp);
+
+ALTER TABLE stg_weather
+ADD CONSTRAINT stg_weather_pk PRIMARY KEY (city, obs_date, obs_hour);

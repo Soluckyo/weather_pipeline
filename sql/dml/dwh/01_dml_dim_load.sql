@@ -8,4 +8,4 @@ select distinct sw.city
 insert into etl_metadata(pipeline_name, last_loaded_date)
 values('dim_city', now())
 on conflict(pipeline_name) do update
-set last_loaded_date = excluded.last_loaded_date
+set last_loaded_date = excluded.last_loaded_date;
