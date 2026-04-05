@@ -17,8 +17,8 @@ def run_pipeline():
     logger.warning(f"Running {DWH_DIR}")
     run_sql_folder(conn, DWH_DIR)
 
-    #logger.warning(f"Running {MART_DIR}")
-    #run_sql_folder(conn, MART_DIR)
+    logger.warning(f"Running {MART_DIR}")
+    run_sql_folder(conn, MART_DIR)
     logger.warning("Complete pipeline")
 
 
