@@ -10,14 +10,14 @@ select rw.city,
    from raw_weather rw
   where ingestion_time > coalesce((select em.last_loaded_date 
   									 from etl_metadata em 
-  									where em.pipeline_name = 'fct_weather')
+  									where em.pipeline_name = 'stg_weather')
   								  ,'1970-01-01')
      ON conflict(city, obs_date, obs_hour) do nothing;
   
  
 --обновление metadata
 insert into etl_metadata(pipeline_name, last_loaded_date)
-values('weather_stg', now())
+values('stg_weather', now())
 on conflict(pipeline_name) do update
 set last_loaded_date = excluded.last_loaded_date;
 
