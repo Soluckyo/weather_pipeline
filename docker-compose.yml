@@ -1,10 +1,12 @@
-version: "3.9"
-
 services:
 
   postgres:
     image: postgres:15
     container_name: weather_postgres_c
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: postgres
     env_file:
       - .env
     volumes:
@@ -13,16 +15,44 @@ services:
     ports:
       - "5433:5432"
 
-  weather_pipeline:
-    build: .
-    container_name: weather_pipeline_c
-    volumes:
-      - ./:/app 
+  airflow-init:
+    image: apache/airflow:2.9.0
     depends_on:
       - postgres
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./app:/app
+    command: >
+      bash -c "
+        airflow db init &&
+        airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com
+      "
+
+  airflow:
+    image: apache/airflow:2.9.0
+    container_name: airflow
+    environment: 
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      - PYTHONPATH=/app
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./app:/app 
+      - ./sql:/sql
     env_file:
       - .env
-    command: python pipeline.py
+    ports:
+      - "8080:8080"
+    command: >
+      bash -c "
+        sleep 40 &&
+        airflow scheduler &
+        airflow webserver
+      "
 
 volumes:
   postgres_data:

@@ -1,4 +1,6 @@
-create table stg_weather(
+\connect weather;
+
+CREATE TABLE IF NOT EXISTS stg_weather(
 	city text,
 	obs_date date,
 	obs_hour int,

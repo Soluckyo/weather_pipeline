@@ -1,5 +1,7 @@
 --создание таблицы погоды
-create table fct_weather(
+\connect weather;
+
+CREATE TABLE IF NOT EXISTS fct_weather(
 city_id int not null,
 obs_date date not null,
 obs_hour int not null,

@@ -1,5 +1,7 @@
 --create table mart_city_stats
-create table mart_city_stats(
+\connect weather;
+
+CREATE TABLE IF NOT EXISTS mart_city_stats(
 	city_name text not null,
 	avg_temp numeric,
 	min_temp numeric,

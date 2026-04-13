@@ -2,6 +2,7 @@ from weather_client import fetch_weather
 from cities import CITIES
 from repository import upsert_weather, get_last_leaded_date, update_last_loaded_date
 from datetime import date, timedelta
+from dateutil.relativedelta import relativedelta
 from logger import get_logger
 from validation import is_valid_record
 
@@ -10,7 +11,7 @@ def load_raw():
     logger = get_logger(__name__)
     last_date = get_last_leaded_date()
     today = date.today()
-    DEFAULT_START_DATE = date(2026, 1, 1)
+    DEFAULT_START_DATE = date.today() - relativedelta(months=3)
 
     start_date = last_date + timedelta(days=1) if last_date else DEFAULT_START_DATE
 
