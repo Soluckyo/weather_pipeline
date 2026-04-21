@@ -7,11 +7,15 @@ from db import get_connection
 from init_tables import init_tables
 from config import STG_DIR, DWH_DIR, MART_DIR
 from logger import get_logger
+import os
 
 logger = get_logger(__name__)
 
 def run_stg():
     logger.warning("--- run stg ---")
+    logger.warning(f"STG_DIR: {STG_DIR}")
+    logger.warning(f"FILES: {os.listdir(STG_DIR)}")
+    
     conn = get_connection()
     try:
         run_sql_folder(conn, STG_DIR)
@@ -22,6 +26,9 @@ def run_stg():
 
 def run_dwh():
     logger.warning("--- run dwh ---")
+    logger.warning(f"DWH_DIR: {DWH_DIR}")
+    logger.warning(f"FILES: {os.listdir(DWH_DIR)}")
+
     conn = get_connection()
     try:
         run_sql_folder(conn, DWH_DIR)
@@ -31,6 +38,9 @@ def run_dwh():
 
 def run_mart():
     logger.warning("--- run mart ---")
+    logger.warning(f"MART_DIR: {MART_DIR}")
+    logger.warning(f"FILES: {os.listdir(MART_DIR)}")
+
     conn = get_connection()
     try:
         run_sql_folder(conn, MART_DIR)
