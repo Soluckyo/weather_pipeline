@@ -2,3 +2,4 @@ config.py
 /__pycache__
 .DS_Store
 .env
+/app/__pycache__

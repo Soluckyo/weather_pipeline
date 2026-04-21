@@ -3,8 +3,7 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime
 from load_raw import load_raw
 from sql_runner import run_sql_folder
-from db import get_connection
-from init_tables import init_tables
+from db import get_pool_connection, release_pool_connection
 from config import STG_DIR, DWH_DIR, MART_DIR
 from logger import get_logger
 import os
@@ -16,11 +15,16 @@ def run_stg():
     logger.warning(f"STG_DIR: {STG_DIR}")
     logger.warning(f"FILES: {os.listdir(STG_DIR)}")
     
-    conn = get_connection()
+    conn = get_pool_connection()
+    conn.autocommit = False
     try:
         run_sql_folder(conn, STG_DIR)
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
     finally:
-        conn.close()
+        release_pool_connection(conn)
     logger.warning("--- end stg ---")
 
 
@@ -29,11 +33,16 @@ def run_dwh():
     logger.warning(f"DWH_DIR: {DWH_DIR}")
     logger.warning(f"FILES: {os.listdir(DWH_DIR)}")
 
-    conn = get_connection()
+    conn = get_pool_connection()
+    conn.autocommit = False
     try:
         run_sql_folder(conn, DWH_DIR)
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
     finally:
-        conn.close()
+        release_pool_connection(conn)
     logger.warning("--- end dwh ---")
 
 def run_mart():
@@ -41,11 +50,16 @@ def run_mart():
     logger.warning(f"MART_DIR: {MART_DIR}")
     logger.warning(f"FILES: {os.listdir(MART_DIR)}")
 
-    conn = get_connection()
+    conn = get_pool_connection()
+    conn.autocommit = False
     try:
         run_sql_folder(conn, MART_DIR)
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
     finally:
-        conn.close()
+        release_pool_connection(conn)
     logger.warning("--- end mart ---")
 
 default_args = {

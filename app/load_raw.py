@@ -33,6 +33,5 @@ def load_raw():
         logger.warning("City %s: %s invalid records filtered", city.name, invalid_count)
 
         upsert_weather(valid_records)
-        #print(f"City {city.name}: {len(records)} records fetched from {start_date} to {today}")
         logger.warning(f"City {city.name}: {len(records)} records fetched from {start_date} to {today}")
     update_last_loaded_date(today)
